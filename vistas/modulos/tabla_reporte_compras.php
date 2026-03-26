@@ -29,7 +29,7 @@ else
 <table class="table table-bordered table-striped ">
              <thead>
                 <tr>
-                 
+                 <th>Cod. compra</th>
                   <th>Nº Lote</th>
                   <th>Fecha</th>
                   <th>Producto</th>
@@ -109,7 +109,8 @@ else
               ?>
                <tr >
                 
-                 <td ><a target="_blank" href="impresiones/tcpdf/pdf/nota_venta.php?codventa=<?php echo $fila->idcompra ?>"> <?php echo $fila->idcompra; ?></a></td>
+                 <td ><a target="_blank" href="impresiones/tcpdf/pdf/nota_compra.php?codcompra=<?php echo $fila->idcompra ?>"> <?php echo $fila->idcompra; ?></a></td>
+                 <td><?php echo $fila->id_compra_producto; ?></td>
                  <td><?php echo $fila->fecha_compra; ?></td>
                  <td><?php echo $fila->nameProducto; ?></td>
                 <!--  <td><?php echo $fila->descripcion; ?></td> -->
@@ -146,7 +147,7 @@ else
              </tbody>
              <tfoot>
                <tr>
-                 <td colspan="9" style="text-align: center;"><b>Totales</b> </td>              
+                 <td colspan="10" style="text-align: center;"><b>Totales</b> </td>              
                  <td><b><?php echo number_format((float)$sumatodascompras, 2, '.', ''); ?></b></td>
                  <td><b><?php echo number_format((float)$sumaMontoaunenInversion, 2, '.', ''); ?></b></td>
                </tr>

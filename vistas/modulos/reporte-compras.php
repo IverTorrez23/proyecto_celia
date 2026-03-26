@@ -98,7 +98,7 @@ if ($_SESSION["tipo_user"]!="admin")
                  
                 </select>
                  <button  class="btn btn-success btn-xs" onclick="generacionReporte();">Generar</button>
-                 <button style="float: right;" class="btn btn-danger btn-xs" onclick="window.open('impresiones/tcpdf/pdf/reporte_ventas.php')">PDF</button>
+                 <button style="float: right;" class="btn btn-danger btn-xs" onclick="window.open('impresiones/tcpdf/pdf/reporte_compras.php')">PDF</button>
          <!--  <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                     title="Collapse">
