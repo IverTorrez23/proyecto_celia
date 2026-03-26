@@ -316,6 +316,38 @@ class Compra extends Conexion{
 		    ORDER BY a.id_compra DESC";
 		return parent::ejecutar($sql);
 	}
+	public function mostrarDatosDeCompra($idCompra)
+	{
+		$sql = "SELECT a.fecha_compra, 
+			               concat(c.nombre_proveedor,' ',c.apellido_proveedor) as proveedor
+					  FROM tb_compra as a 
+				 LEFT JOIN tb_proveedor as c 
+				        ON a.id_proveedor=c.id_proveedor 
+					 WHERE a.id_compra=$idCompra";
+		return parent::ejecutar($sql);
+	}
+	public function nota_Compra($idCompra)
+	{
+		$sql = "SELECT a.id_compra_producto,
+		               a.cantidad_compra, 
+		               b.nombre_producto, 
+					   b.codigo_producto, 
+					   b.descripcion, 
+					   COALESCE(c.nombre_marca, 'Sin Marca') AS nombre_marca,
+					   a.precio_unit_compra,
+					   a.precio_venta_prod, 
+					   a.subtotal_compra, 
+					   e.monto_compra,
+					   a.stock_actual,
+					   b.id_producto,
+					   a.id_compra
+				  FROM tb_compra_producto AS a 
+			INNER JOIN tb_compra AS e ON a.id_compra = e.id_compra 
+			INNER JOIN tb_producto AS b ON a.id_producto = b.id_producto 
+			 LEFT JOIN tb_marca AS c ON b.id_marca = c.id_marca 
+			     WHERE e.id_compra = $idCompra";
+		return parent::ejecutar($sql);
+	}
 
 
 }
