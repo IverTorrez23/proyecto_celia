@@ -381,6 +381,13 @@
 							
 						</a>
 					</li>
+					<li>
+						<a href="reporte-venta-general">
+							<i class="fa fa-circle-o"></i>
+							<span>Reportes gral. Ventas</span>
+							
+						</a>
+					</li>
 
 					<!--<li>
 						<a href="cierre-cajas">

@@ -3,6 +3,7 @@ include_once("../modelos/venta.modelo.php");
 include_once("../modelos/ventaCliente.modelo.php");
 include_once("../modelos/ventaProducto.modelo.php");
 include_once("../modelos/compraProducto.modelo.php");
+include_once("../modelos/cuotaVenta.modelo.php");
 
 if (isset($_POST["btnguardarventa"])) 
 {
@@ -38,6 +39,13 @@ if (isset($_POST["btnguardarventa"]))
          $hora=date("H:i");
          $fechaHora=$fecha.' '.$hora;
 
+		 $esCancelado = 0;
+	if ($_POST["switchCredit"] == 1) {
+		$esCancelado = 0;
+	} else {
+		$esCancelado = 1;
+	}
+
 	   	$objventa=new Venta();
 	   	$objventa->set_fechaventa($fechaHora);
 	   	$objventa->set_montoVenta($_POST['montoventatotal']);
@@ -48,6 +56,9 @@ if (isset($_POST["btnguardarventa"]))
 	   	$objventa->set_estadoVenta("Activo");
 	   	$objventa->set_usuarioBaja(0);
 	   	$objventa->set_fechBaja('');
+		$objventa->set_ventaCredito($_POST["switchCredit"]);
+	    $objventa->set_cancelado($esCancelado);
+		
 	   	if ($objventa->guardarVenta()) 
 	   	{
 	   		/*preguntamos si hay cliente seleccionado*/
@@ -63,6 +74,10 @@ if (isset($_POST["btnguardarventa"]))
 	   				
 	   			}
 	   		}
+			//Registra la cuota si es a credito
+		if ($_POST["switchCredit"] == 1 && $_POST["cuotaVenta"] > 0) {
+			guardarCuotaVenta($filult->ultVenta);
+		}
 
 	   		echo $filult->ultVenta;/*devuelve el codigo de la venta para registrar el detalle*/
 	   	}
@@ -139,6 +154,25 @@ if (isset($_POST["btnguardarventa"]))
 		 	}
    }//fin del else que hace la eliminacion
  }//fin de la funcion 
+
+ function guardarCuotaVenta($idVenta)
+{
+	ini_set('date.timezone', 'America/La_Paz');
+	$fecha = date("Y-m-d");
+	$hora = date("H:i");
+	$fechaHora = $fecha . ' ' . $hora;
+	$objcuota = new CuotaVenta();
+	$objcuota->set_fechaCuota($fechaHora);
+	$objcuota->set_montoCuota($_POST["cuotaVenta"]);
+	$objcuota->set_idVenta($idVenta);
+	$objcuota->set_idAdmin($_POST["textiduser"]);
+	$objcuota->set_estadoCoutaVenta("Activo");
+	$objcuota->set_tipoReg($_POST["texttipouser"]);
+	//$objcuota->set_usuarioBaja();
+	//$objcuota->set_fechaBaja();
+	$objcuota->guardarCuotaVenta();
+}
+
 
    
 

@@ -230,13 +230,39 @@ WHERE tb_producto.id_producto=tb_compra_producto.id_producto AND tb_compra_produ
 		             b.stock_actual,
 		             b.precio_unit_compra,
 		             b.precio_venta_prod,
-                     b.precio_venta_prod_Fact 
+                     b.precio_venta_prod_Fact,
+					 alm.nombre_almacen
 			FROM tb_producto as a 
 			    INNER JOIN tb_compra_producto as b ON  a.id_producto=b.id_producto 
 			    INNER JOIN tb_marca as c ON c.id_marca= a.id_marca
 			    INNER JOIN tb_categoria as d ON a.id_categoria=d.id_categoria
+				INNER JOIN tb_almacen as alm ON a.id_almacen = alm.id_almacen
 			WHERE 
              b.stock_actual>0
+             and b.estado='Activo'";
+             return parent::ejecutar($sql);
+	}
+	public function reporteInventarioPorAlmacen($idAlmacen)
+	{
+		$sql="SELECT b.id_compra_producto, 
+		             a.nombre_producto,
+		             a.codigo_producto,
+		             a.descripcion,
+		             c.nombre_marca,
+		             d.nombre_categoria,
+		             b.stock_actual,
+		             b.precio_unit_compra,
+		             b.precio_venta_prod,
+                     b.precio_venta_prod_Fact,
+					 alm.nombre_almacen
+			FROM tb_producto as a 
+			    INNER JOIN tb_compra_producto as b ON  a.id_producto=b.id_producto 
+			    INNER JOIN tb_marca as c ON c.id_marca= a.id_marca
+			    INNER JOIN tb_categoria as d ON a.id_categoria=d.id_categoria
+				INNER JOIN tb_almacen as alm ON a.id_almacen = alm.id_almacen
+			WHERE 
+             b.stock_actual>0
+			 and a.id_almacen = $idAlmacen
              and b.estado='Activo'";
              return parent::ejecutar($sql);
 	}
