@@ -20,8 +20,8 @@ public function Conexion()
 {
 	$this->servidor = "localhost";
 	$this->usuario = "root";
-	$this->password = "celiaquispe";
-	$this->basedatos = "sistema_venta";
+	$this->password = "pamela123";
+	$this->basedatos = "sistema_celia";
 	
 }
 //metedos de acceso set y get

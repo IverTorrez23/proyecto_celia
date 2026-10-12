@@ -7,6 +7,7 @@ require_once('tcpdf_include.php');
 
 
 include_once('../../../modelos/venta.modelo.php');
+include_once('../../../modelos/cuotaVenta.modelo.php');
 class PDF extends TCPDF
 {
    //Cabecera de página
@@ -67,6 +68,13 @@ if ($fila1->cliente==NULL)
   {
     $cliente=$fila1->cliente;
   }
+
+  $tipoVenta = '';
+if ($fila1->venta_credito == 1) {
+  $tipoVenta = 'Credito';
+} else {
+  $tipoVenta = 'Contado';
+}
 
 $fechaventa=$fila1->fecha_venta;
 $fechaComoEntero = strtotime($fechaventa);
@@ -143,7 +151,7 @@ $bloqueFechaDatos=<<<EOF
 <table  style="width: 150px;">
   <thead>
      <tr >
-                  <th style="text-align:center; ">Montero</th>
+                  <th style="text-align:center; ">Santa Cruz</th>
                   <th style="text-align:center; ">$dia</th>
                   <th style="text-align:center; ">$mes</th>  
                   <th style="text-align:center; ">$anio</th>               
@@ -157,7 +165,7 @@ $pdf->writeHTML($bloqueFechaDatos,false,false,false,false,'');
 $pdf->Ln(2);
 
 
-
+$pdf->Cell(0,0, 'Tipo venta: '.$tipoVenta, 0, 6, 'L', 0, '', 1);
 
 $pdf->Cell(0,0, 'Señor(es): '.$cliente, 0, 6, 'L', 0, '', 1);
 
@@ -226,6 +234,51 @@ $bloqueTotal=<<<EOF
 EOF;
 
 $pdf->writeHTML($bloqueTotal,false,false,false,false,'');
+
+
+/*****************LISTADO DE CUOTAS******************** */
+if ($fila1->venta_credito == 1) {
+  $pdf->SetMargins(3, 30, 101);
+  $pdf->Ln(5);
+  $pdf->SetFont('', '', 10);
+  $pdf->Cell(0, 0, 'CUOTAS DE LA VENTA', 0, 6, 'L', 0, '', 1);
+  $pdf->SetFont('', '', 8);
+  $bloqueHeadCuota = <<<EOF
+<table  style="width: 300px;" border="0.1px">
+  <thead>
+     <tr style="background-color:#e8e8e8;">
+                  <th style="text-align:center; width:150px;">Fecha</th>
+                  <th style="text-align:center; width:150px;">Monto</th>           
+    </tr>
+  </thead>
+</table>
+EOF;
+  $pdf->writeHTML($bloqueHeadCuota, false, false, false, false, '');
+
+
+  $totalCuota = 0;
+  $saldoVenta = 0;
+  $obj = new CuotaVenta();
+  $resultado = $obj->ReporteCuotaVentasActivasDeUnaVenta($idventa);
+  while ($fila = mysqli_fetch_object($resultado)) {
+    $totalCuota = $fila->monto_cuota + $totalCuota;
+    $bloqueDatosCuota = <<<EOF
+                                  <table style="width: 300px;" border="0.1px">
+                                  <thead>
+                                  <tr style="page-break-inside: avoid; " nobr="true">
+                                     <th style="text-align:center; width:150px;">$fila->fecha_cuota</th>
+                                     <th style="text-align:center; width:150px;">$fila->monto_cuota</th>                                
+                                  </tr>
+                                  </thead>
+                                  </table>
+                                  EOF;
+    $pdf->writeHTML($bloqueDatosCuota, false, false, false, false, '');
+  }
+  $saldoVenta = $totalVenta - $totalCuota;
+  $saldoFormateado = number_format($saldoVenta, 2, '.', '');
+  $pdf->SetFont('', '', 10);
+  $pdf->Cell(0, 0, 'Saldo: ' . $saldoFormateado, 0, 6, 'L', 0, '', 1);
+}
 
 
 $nameFile='nota_Venta.pdf';

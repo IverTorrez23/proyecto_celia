@@ -143,6 +143,8 @@ id_empleado int,
 estado varchar(10),
 usuario_baja  int,
 fecha_baja datetime,
+venta_credito int,
+cancelado int,
 FOREIGN KEY(id_empleado) REFERENCES tb_empleado(id_empleado)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -223,4 +225,16 @@ CREATE table tb_almacen(
     estado          varchar(10),
     usuario_baja    int,
     fecha_baja      datetime
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE tb_cuota_venta(
+id_cuota_venta int PRIMARY KEY AUTO_INCREMENT,
+fecha_cuota datetime,
+monto_cuota DECIMAL(30, 2),
+id_venta int,
+usuario_alta int,
+estado varchar(10),
+tipo_reg varchar(10),
+usuario_baja int,
+fecha_baja datetime
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -1,0 +1,14 @@
+ALTER TABLE tb_venta ADD venta_credito int
+ALTER TABLE tb_venta ADD cancelado int
+
+CREATE TABLE tb_cuota_venta(
+id_cuota_venta int PRIMARY KEY AUTO_INCREMENT,
+fecha_cuota datetime,
+monto_cuota DECIMAL(30, 2),
+id_venta int,
+usuario_alta int,
+estado varchar(10),
+tipo_reg varchar(10),
+usuario_baja int,
+fecha_baja datetime
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
